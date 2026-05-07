@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+
+    <style>
+
+        table{
+            border-collapse: collapse;
+            width: 400px;
+            margin-top: 20px;
+        }
+
+        th, td,tbody{
+            border: 1px solid black;
+            padding: 10px;
+          
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2>User Registration</h2>
+
+    Name:
+    <input type="text" id="name">
+
+    <br><br>
+
+    Email:
+    <input type="email" id="email">
+
+    <br><br>
+
+    <button onclick="saveData()">Register</button>
+
+    <h2>Registered Users</h2>
+
+    <table>
+
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+
+        <tbody id="data"></tbody>
+
+    </table>
+
+    <script>
+
+        // display users when page loads
+        showUsers();
+
+        function saveData(){
+
+            // get input values
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+
+            // create object
+            let user = {
+                name: name,
+                email: email
+            };
+
+            // get old data
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // add new user
+            users.push(user);
+
+            // save in localStorage
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // AJAX POST
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.open("POST", "/save", true);
+
+            xhttp.send();
+
+            // clear inputs
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+
+            // refresh table
+            showUsers();
+
+        }
+
+        function showUsers(){
+
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            let output = "";
+
+            for(let i = 0; i < users.length; i++){
+
+                output += `
+                    <tr>
+                        <td>${users[i].name}</td>
+                        <td>${users[i].email}</td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById("data").innerHTML = output;
+
+        }
+
+    </script>
+
+</body>
+</html>
