@@ -7,14 +7,14 @@
 
         table{
             border-collapse: collapse;
-            width: 400px;
+            width: 600px;
             margin-top: 20px;
         }
 
-        th, td,tbody{
+        th, td{
             border: 1px solid black;
             padding: 10px;
-          
+            text-align: center;
         }
 
     </style>
@@ -35,6 +35,16 @@
 
     <br><br>
 
+    Age:
+    <input type="number" id="age">
+
+    <br><br>
+
+    Branch:
+    <input type="text" id="branch">
+
+    <br><br>
+
     <button onclick="saveData()">Register</button>
 
     <h2>Registered Users</h2>
@@ -44,6 +54,8 @@
         <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Age</th>
+            <th>Branch</th>
         </tr>
 
         <tbody id="data"></tbody>
@@ -60,11 +72,15 @@
             // get input values
             let name = document.getElementById("name").value;
             let email = document.getElementById("email").value;
+            let age = document.getElementById("age").value;
+            let branch = document.getElementById("branch").value;
 
             // create object
             let user = {
                 name: name,
-                email: email
+                email: email,
+                age: age,
+                branch: branch
             };
 
             // get old data
@@ -73,7 +89,7 @@
             // add new user
             users.push(user);
 
-            // save in localStorage
+            // save data
             localStorage.setItem("users", JSON.stringify(users));
 
             // AJAX POST
@@ -83,9 +99,11 @@
 
             xhttp.send();
 
-            // clear inputs
+            // clear input fields
             document.getElementById("name").value = "";
             document.getElementById("email").value = "";
+            document.getElementById("age").value = "";
+            document.getElementById("branch").value = "";
 
             // refresh table
             showUsers();
@@ -98,16 +116,20 @@
 
             let output = "";
 
+            // loop users
             for(let i = 0; i < users.length; i++){
 
                 output += `
                     <tr>
                         <td>${users[i].name}</td>
                         <td>${users[i].email}</td>
+                        <td>${users[i].age}</td>
+                        <td>${users[i].branch}</td>
                     </tr>
                 `;
             }
 
+            // display data
             document.getElementById("data").innerHTML = output;
 
         }
